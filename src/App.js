@@ -52,8 +52,28 @@ import brand from "assets/images/logo-ct.png";
 import "assets/css/nucleo-svg.css";
 import "assets/css/nucleo-icons.css";
 
+//WalletConnect
+
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/react'
+import { configureChains, createConfig, WagmiConfig, useWalletClient} from 'wagmi'
+import { arbitrum, mainnet, polygon } from 'wagmi/chains'
+
+const chains = [arbitrum, mainnet, polygon]
+const projectId = 'f6f6e4cbc06ca15d30d3d783e5410977' // Demo Project ID
+
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+})
+
+const ethereumClient = new EthereumClient(wagmiConfig, chains)
 
 export default function App() {
+  
+
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
@@ -138,52 +158,60 @@ export default function App() {
   );
 
   return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={brand}
-              brandName=""
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            {/* <Configurator /> */}
-            {/* {configsButton} */}
-          </>
-        )}
-        {layout === "vr" && <Configurator />}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
-      </ThemeProvider>
-    </CacheProvider>
+        <CacheProvider value={rtlCache}>
+          <WagmiConfig config={wagmiConfig}>
+          <ThemeProvider theme={themeRTL}>
+            <CssBaseline />
+            {layout === "dashboard" && (
+              <>
+                <Sidenav
+                  color={sidenavColor}
+                  brand={brand}
+                  brandName=""
+                  routes={routes}
+                  onMouseEnter={handleOnMouseEnter}
+                  onMouseLeave={handleOnMouseLeave}
+                />
+                {/* <Configurator /> */}
+                {/* {configsButton} */}
+              </>
+            )}
+            {layout === "vr" && <Configurator />}
+            <Routes>
+              {getRoutes(routes)}
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+            </Routes>
+          </ThemeProvider>
+          </WagmiConfig>
+          <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        </CacheProvider>
   ) : (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          <Sidenav
-            color={sidenavColor}
-            brand={brand}
-            brandName=""
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          />
-          {/* <Configurator /> */}
-          {/* {configsButton} */}
-        </>
-      )}
-      {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-      </Routes>
-    </ThemeProvider>
+    <>
+    <WagmiConfig config={wagmiConfig}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={brand}
+                brandName=""
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+              {/* <Configurator /> */}
+              {/* {configsButton} */}
+            </>
+          )}
+          {layout === "vr" && <Configurator />}
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+        </ThemeProvider>
+        </WagmiConfig>
+          <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+          </>
   );
 }

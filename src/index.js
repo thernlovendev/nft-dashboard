@@ -17,6 +17,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
+import { useWeb3Modal } from '@web3modal/react'
+
+function HomePage() {
+  const { open, close } = useWeb3Modal()
+
+  return <button onClick={() => open()}>Connect</button>
+}
+
 
 // Soft UI Dashboard React Context Provider
 import { SoftUIControllerProvider } from "context";
@@ -26,6 +34,7 @@ root.render(
   <BrowserRouter>
     <SoftUIControllerProvider>
       <App />
+      <HomePage/>
     </SoftUIControllerProvider>
   </BrowserRouter>
 );
