@@ -1,0 +1,29 @@
+
+-----------------------------------------------DASHBOARD SECTION -------------------------------------------------------------------
+
+// Total Assets 
+
+ - Balance of Total Value of Account ERC20 AND ERC-721
+
+//Total Items
+
+- Count of Total ERC20 and ERC-721
+
+// Card of NFT
+
+Each Nft needs to has own CARD, make dinamyc card based on ERC-721 Balances
+	+ Floor Price = Floor Pirce of NFT Collection
+	+ Amount = Amount of NFT that users has in Colecction showed
+
+
+
+----------------------------------------------- NFT Colelction Section  -------------------------------------------------------------------
+
+Shows Dinamyc Section of NFT's based on Balnce of each NFT that User has, also when the user cliks on 'Pick Down', it needs to show the total balance of NFT Colection Selected.
+
+
+Sell NFT SDK Marketplace.
+
+
+
+
